@@ -16,7 +16,7 @@ typedef NSString* (^RTUILabelTextFilter)(NSString*);
 
 @interface RTUILabel : UILabel
 
-@property (nonatomic, strong) RTLabel* rtLabel;
+@property (nonatomic, retain) RTLabel* rtLabel;
 @property (nonatomic, readwrite) BOOL verticalCenteringEnabled;
 @property (nonatomic, copy) RTUILabelTextFilter textFilter;
 

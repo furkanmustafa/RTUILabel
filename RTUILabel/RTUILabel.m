@@ -13,14 +13,19 @@
 
 @implementation RTUILabel
 
+- (void)dealloc {
+	self.textFilter = nil;
+	self.rtLabel = nil;
+	[super dealloc];
+}
 - (void)setup {
-	// Initialization code
-	self.rtLabel = [[RTLabel alloc] initWithFrame:self.bounds];
+	self.rtLabel = [[[RTLabel alloc] initWithFrame:self.bounds] autorelease];
 	[self addSubview:_rtLabel];
 }
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+		// clear annoying default UILabel background
 		super.backgroundColor = UIColor.clearColor;
 		[self setup];
     }
@@ -30,6 +35,7 @@
 	self = [super initWithCoder:aDecoder];
 	if (self) {
 		[self setup];
+		// move parameter values from UILabel to RTLabel
 		self.verticalCenteringEnabled = YES;
 		self.textColor = super.textColor;
 		self.textAlignment = super.textAlignment;
@@ -39,6 +45,8 @@
 	}
 	return self;
 }
+
+#pragma mark Proxy Properties
 
 - (void)setTextColor:(UIColor*)textColor {
 	[_rtLabel setTextColor:textColor];
@@ -87,12 +95,17 @@
 	return 0;
 }
 
+#pragma mark TextFilter Block
+
 - (void)setTextFilter:(RTUILabelTextFilter)textFilter {
+	[_textFilter autorelease];
 	_textFilter = [textFilter copy];
 	if (_textFilter) {
 		self.text = self.text; // reset
 	}
 }
+
+#pragma mark Layout
 
 - (void)layoutSubviews {
 	[super layoutSubviews];
